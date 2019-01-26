@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+
+    </script>
+
+    <div id="firebaseui-auth-container"></div>
+    <div class="container">
+        <div class="heart"></div>
+    </div>
+
+</body>
+<script>
+    // Initialize Firebase
+    var t1,t2,t3,offset
+    var config = {
+        apiKey: "AIzaSyCdGTjnonOsMoMWm9DMW53wkPPCeI_vcf4",
+        authDomain: "premwit-game-2019.firebaseapp.com",
+        databaseURL: "https://premwit-game-2019.firebaseio.com",
+        projectId: "premwit-game-2019",
+        storageBucket: "premwit-game-2019.appspot.com",
+        messagingSenderId: "712284503836"
+    };
+    firebase.initializeApp(config);
+    // Initialize Cloud Firestore through Firebase
+    var db = firebase.firestore();
+
+    // Disable deprecated features
+    db.settings({
+        timestampsInSnapshots: true
+    });
+
+    firebase.auth().signInWithEmailAndPassword("fuck@fuck.com", "shitshitshit").catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
+
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            firebase.auth().currentUser.getIdToken( /* forceRefresh */ true).then(function (idToken) {
+                console.log(idToken)
+                t1 = Date.now()
+                var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://asia-northeast1-premwit-game-2019.cloudfunctions.net/auth/gettime",
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + idToken,
+                        "cache-control": "no-cache",
+                        "Postman-Token": "f40da6b1-3d48-4728-a744-a3d572f30478"
+                    },
+                    "processData": false,
+                    "data": ""
+                }
+
+                $.ajax(settings).done(function (response) {
+                    t2 = parseInt(response)
+                    t3 = Date.now()
+                    offset = (2*t2-t1-t3)/2
+                    db.collection("game").doc("191qXiQdlFiXcU4HZeqz")
+                    .onSnapshot(function (doc) {
+                        var data = doc.data()
+                        var t = Date.now()+offset
+                        console.log(t)
+                        hp = data.hp0 - (data.decrement_rate*(t-parseInt(data.t0)))
+                        console.log(hp)
+                    });
+                    
+                             
+                });
+            }).catch(function (error) {
+                // Handle error
+            });
+        } else {
+            // User is signed out.
+            // ...
+        }
+    });
+
+
+
+    var i =0
+
+    function LoopForever() {
+        $('.heart').each(function (index) {
+            if (i % 2 == 1) {
+                $(this).addClass("beat")
+            } else {
+                $(this).removeClass("beat")
+            }
+            i++
+        });
+    }
+
+    var interval = self.setInterval(function () {
+        LoopForever()
+    }, 500);
+</script>
+
+</html>
