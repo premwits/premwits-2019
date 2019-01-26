@@ -1,0 +1,170 @@
+@font-face {
+    font-family: 'Bebas';
+    src: url('../fonts/bebas-webfont.woff2') format('woff2'),
+         url('../fonts/bebas-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Open Sans', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+#main-body {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.1s linear;
+}
+
+#group-body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.1s linear;
+}
+
+#login-body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+#login-main {
+    flex: 1 0 auto;
+}
+
+.index-footer {
+    position: fixed;
+}
+
+.page-footer {
+    left: 0px;
+    bottom: 0px;
+    padding-top: 0px;
+    height: 64px;
+    width: 100%;
+    z-index: 100;
+}
+
+.footer-copyright {
+    line-height: 64px;
+    padding: 0px !important;
+}
+
+.footer-copyright-container {
+    width: 100%;
+    margin: 0px;
+    max-width: none;
+}
+
+.footer-container {
+    width: 85%;
+}
+
+.font-header {
+    font-family: 'Titillium Web', 'Poppins', 'Bebas', sans-serif;
+    font-weight: 900;
+}
+
+.brand-logo {
+    width: 70%;
+}
+
+.card-content {
+    padding-top: 20px !important;
+}
+
+.range-field {
+    background-color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.card-description {
+    text-align: center;
+    margin-top: 10px;
+}
+
+button {
+    font-family: 'Titillium Web', 'Poppins', 'Bebas', sans-serif;
+    font-weight: bold;
+}
+
+.health-left {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: pink;
+    height: 100%;
+    float: left;
+}
+
+.health-right {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: gray;
+    width: auto;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-health {
+    height: 50px;
+}
+
+.health-text {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    left: 50%;
+}
+
+.health-line-container {
+    overflow: hidden;
+}
+
+#decrement-update-panel {
+    opacity: 0;
+}
+
+.hidden {
+    height: 0px;
+    -webkit-transition: height 0.5s linear, opacity 0.5s linear;
+       -moz-transition: height 0.5s linear, opacity 0.5s linear;
+        -ms-transition: height 0.5s linear, opacity 0.5s linear;
+         -o-transition: height 0.5s linear, opacity 0.5s linear;
+            transition: height 0.5s linear, opacity 0.5s linear;
+}
+
+.hidden.open {
+    height: 100px;
+    -webkit-transition: height 0.5s linear, opacity 0.5s linear;
+       -moz-transition: height 0.5s linear, opacity 0.5s linear;
+        -ms-transition: height 0.5s linear, opacity 0.5s linear;
+         -o-transition: height 0.5s linear, opacity 0.5s linear;
+            transition: height 0.5s linear, opacity 0.5s linear;
+}
+
+.login-card {
+    padding: 24px;
+}
+
+.btn-group {
+    width: 50px;
+}
+
+.fit-content {
+    width: fit-content;
+    cursor: pointer;
+}
+
+.btn-eq {
+    font-size: 20;
+    font-style: normal;
+    width: 120px;
+    height: 100px;
+}

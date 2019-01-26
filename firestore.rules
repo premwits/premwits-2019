@@ -1,0 +1,11 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /game/{prop} {
+    	allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+    match /stats/{stat} {
+    	allow read,write: if request.auth.uid != null;
+    }
+  }
+}
