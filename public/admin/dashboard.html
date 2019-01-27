@@ -27,6 +27,9 @@
             firebase.initializeApp(config);
         </script>
         <script>
+            if (!firebase.auth().currentUser) {
+                window.location = 'index.html';
+            }
             var hp0 = 0;
             var t0 = 0;
             var dec = 0;
