@@ -68,7 +68,7 @@ app.post('/submitcode', (req,res) => {
 	var group = parseInt(req.body.group);
 	var pts = 0;
 	if(code in codedict){
-		pts = codedict[code];
+		pts = codedict[code] * 2000;
 	}
 	var ts = new Date().getTime().toString();
 	admin.firestore().collection('game').doc('191qXiQdlFiXcU4HZeqz').get().then(function(doc){
