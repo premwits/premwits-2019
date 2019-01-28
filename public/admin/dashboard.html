@@ -144,7 +144,7 @@
                     querySnapshot.forEach(function(doc){
                         var group = doc.data()['group'];
                         var points = doc.data()['points'];
-                        document.getElementById('stat-group-'+group+'-points').innerHTML = points;
+                        document.getElementById('stat-group-'+group+'-points').innerHTML = points/2000;
                     })
                 });
             });
