@@ -5,28 +5,48 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <script src="credentials.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
     <style>
 
     </style>
 </head>
 
-<body>
+<body style="overflow: hidden">
     <script>
 
     </script>
-
+    <div style="position:fixed; color: white; top: 20px; left: 20px; font-family:'Poppins'; font-weight: bold" id="pts"></div>
+    <canvas id="c"></canvas>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/animejs/1.0.0/anime.min.js'></script>
+    <script src="index.js"></script>
     <div id="firebaseui-auth-container"></div>
+    <div id="hpp" style="    
+        position: fixed;
+        top: 46%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 1000;
+        color: white;
+        font-family: 'Poppins';
+        font-weight: bold">
+        <h1>...</h1>
+    </div>
     <div class="container">
         <div class="heart"></div>
     </div>
 
 </body>
+
 <script>
     // Initialize Firebase
     var t1, t2, t3, offset
+    var hp0, t0, r
     var config = {
         apiKey: "AIzaSyCdGTjnonOsMoMWm9DMW53wkPPCeI_vcf4",
         authDomain: "premwit-game-2019.firebaseapp.com",
@@ -44,11 +64,26 @@
         timestampsInSnapshots: true
     });
 
+
+    firebase.auth().signInWithEmailAndPassword(CRED_EMAIL, CRED_PASSWORD).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
+
     firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
+        if (user) { 
+            
+            setInterval(function() {
+                var t = performance.now() + offset
+                hp = hp0 - r*(t - t0)/1000
+                p = hp/2000
+                //p = p/500000
+                if(p < 0) p = 0;
+                $(".heart").css("filter","brightness("+p/500000+")")
+                $("#hpp").html("<h1>"+Math.round(p).toString()+"</h1>")
+            }, 50)
             firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
-                console.log(idToken)
-                t1 = Date.now()
+                t1 = performance.now()
                 var settings = {
                     "async": true,
                     "crossDomain": true,
@@ -66,16 +101,30 @@
 
                 $.ajax(settings).done(function (response) {
                     t2 = parseInt(response)
-                    t3 = Date.now()
+                    t3 = performance.now()
                     offset = (2 * t2 - t1 - t3) / 2
                     db.collection("game").doc("191qXiQdlFiXcU4HZeqz")
                         .onSnapshot(function (doc) {
-
                             var data = doc.data()
-                            var t = Date.now() + offset
-                            hp(data.decrement_rate, data.t0, parseInt(data.hp0))
+                            r = data.decrement_rate
+                            t0 = data.t0
+                            hp0 = data.hp0
                         });
+                    db.collection('logs').onSnapshot(function(querySnapshot){
+                        querySnapshot.docChanges().forEach(function(change){
+                            if(change.type === "added"){
+                                startFauxClicking()
 
+                                var data = change.doc.data()
+                                var pts = data['points']
+                                
+                                $("#pts").html(parseInt(pts/1000) + "<br>" + $("#pts").html())
+                                console.log(pts)
+                            }
+                        })
+                        
+                        
+                    })
 
                 });
             }).catch(function (error) {
@@ -87,13 +136,7 @@
         }
     });
 
-    function hp(decrement_rate, t0, hp0) {
-        setInterval(function () {
-            var t = Date.now() + offset
-            hp = hp0 - (decrement_rate * (t - parseInt(t0)))
-            console.log(hp)
-        }, 1000);
-    }
+        
 
     var i = 0
 
