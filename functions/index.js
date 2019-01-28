@@ -84,7 +84,7 @@ app.post('/submitcode', (req,res) => {
 	var user = req.user.uid;
 	var retObj = {}
 	admin.firestore().collection('logs').get().then(function(querySnapshot){
-		var id = 1;
+		var id = 0;
 		querySnapshot.forEach(function(doc){
 			var cid = doc.data()['id'];
 			if(cid > id){
