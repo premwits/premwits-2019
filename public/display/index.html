@@ -8,7 +8,9 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <script src="credentials.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
     <style>
 
@@ -19,7 +21,9 @@
     <script>
 
     </script>
-
+    <canvas id="c"></canvas>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/animejs/1.0.0/anime.min.js'></script>
+    <script src="index.js"></script>
     <div id="firebaseui-auth-container"></div>
     <div id="hpp" style="    
         position: fixed;
@@ -37,6 +41,7 @@
     </div>
 
 </body>
+
 <script>
     // Initialize Firebase
     var t1, t2, t3, offset
@@ -59,7 +64,6 @@
     });
 
 
-
     firebase.auth().signInWithEmailAndPassword(CRED_EMAIL, CRED_PASSWORD).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -67,6 +71,7 @@
 
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) { 
+            
             setInterval(function() {
                 var t = performance.now() + offset
                 hp = hp0 - r*(t - t0)/1000
@@ -99,13 +104,14 @@
                     offset = (2 * t2 - t1 - t3) / 2
                     db.collection("game").doc("191qXiQdlFiXcU4HZeqz")
                         .onSnapshot(function (doc) {
-                            
                             var data = doc.data()
                             r = data.decrement_rate
                             t0 = data.t0
                             hp0 = data.hp0
                         });
-
+                    db.collection('logs').onSnapshot(function(querySnapshot){
+                        startFauxClicking()
+                    })
 
                 });
             }).catch(function (error) {
