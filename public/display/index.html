@@ -19,6 +19,17 @@
     </script>
 
     <div id="firebaseui-auth-container"></div>
+    <div id="hpp" style="    
+        position: fixed;
+        top: 46%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        z-index: 1000;
+        color: white;
+        font-family: 'Poppins';
+        font-weight: bold">
+        <h1>...</h1>
+    </div>
     <div class="container">
         <div class="heart"></div>
     </div>
@@ -61,8 +72,8 @@
                 p = p/500000
                 console.log(p)
                 $(".heart").css("filter","brightness("+p+")")
-                
-            }, 1000)
+                $("#hpp").html("<h1>"+parseFloat(p*100).toFixed(2)+" %</h1>")
+            }, 50)
             firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
                 t1 = performance.now()
                 var settings = {
@@ -107,18 +118,7 @@
         }
     });
 
-    function hp(decrement_rate, t0, hp0) {
-        var t = Date.now() + offset
-        p = (hp0 - (decrement_rate * (t - parseInt(t0)/1000)))/2000
-        p = p/(500000)
-        console.log(p)
-        $(".heart").css("filter","brightness("+p+")")
-    }
-
-    setInterval(function () {
-
-    },1000)
-
+        
 
     var i = 0
 
