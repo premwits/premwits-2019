@@ -69,20 +69,20 @@
             })
             function updateCurrentHealth(hp){
                 if(hp < 0) hp = 0;
-                document.getElementById('current-health').innerHTML = parseFloat(Math.round(hp/100000)/10).toFixed(1);
-                document.getElementById('health-tooltip').setAttribute('data-tooltip',parseFloat(hp/1000000).toFixed(6));
+                document.getElementById('current-health').innerHTML = parseFloat(Math.round(hp/200)/10).toFixed(1);
+                document.getElementById('health-tooltip').setAttribute('data-tooltip',parseFloat(hp/2000).toFixed(6));
                 var percent = hp / 10000000;
                 document.getElementById('healthbar').style.width = parseFloat(percent) + '%';
             }
             function updateCurrentDecrementRate(dec){
-                document.getElementById('health-decrement').innerHTML = parseFloat(Math.round(dec/10000)/100).toFixed(2);
+                document.getElementById('health-decrement').innerHTML = parseFloat(Math.round(dec/20)/100).toFixed(2);
                 if(document.getElementById('decrement-update-panel').style.opacity == '0'){
-                    document.getElementById('health-decrement-slider').value = parseFloat(Math.round(dec/10000)/100).toFixed(2);
+                    document.getElementById('health-decrement-slider').value = parseFloat(Math.round(dec/20)/100).toFixed(2);
                 }
             }
             function enableUpdatePanel(){
                 document.getElementById('btn-enable-update').setAttribute('disabled','');
-                document.getElementById('health-decrement-slider').value = parseFloat(Math.round(dec/10000)/100).toFixed(2);
+                document.getElementById('health-decrement-slider').value = parseFloat(Math.round(dec/20)/100).toFixed(2);
                 document.getElementById('decrement-update-panel').classList.add('open');
                 setTimeout(function() {
                     document.getElementById('decrement-update-panel').style.opacity = '1';
@@ -99,7 +99,7 @@
                 disableUpdatePanel();
                 var hpn = hp0 - Math.round(dec*(getTime() - t0)/1000.0);
                 var tn = getTime();
-                var wrvalue = Math.round(parseFloat(document.getElementById('health-decrement-slider').value) * 1000000);
+                var wrvalue = Math.round(2000*parseFloat(document.getElementById('health-decrement-slider').value));
                 firebase.firestore().collection('game').doc('191qXiQdlFiXcU4HZeqz').update({
                     decrement_rate: wrvalue,
                     hp0: hpn,
@@ -107,7 +107,7 @@
                 });
             }
             function instantModify(delta){
-                var hpn = hp0 - Math.round(dec*(getTime() - t0)/1000.0) + delta*1000000;
+                var hpn = hp0 - Math.round(dec*(getTime() - t0)/1000.0) + delta*2000;
                 if(hpn > 1000000000) hpn = 1000000000;
                 else if(hpn < 0) hpn = 0;
                 var tn = getTime();
@@ -119,9 +119,9 @@
             function resetHitpoint(){
                 var hp = document.getElementById('rst-hp-inline').value;
                 console.log(hp);
-                if(hp === null || hp === undefined || hp < 0 || hp > 1000) return;
+                if(hp === null || hp === undefined || hp < 0 || hp > 500000) return;
                 firebase.firestore().collection('game').doc('191qXiQdlFiXcU4HZeqz').update({
-                    hp0: hp * 1000000,
+                    hp0: hp * 2000,
                     t0: getTime()
                 });
             }
@@ -298,30 +298,32 @@
                                         <div class="health-right"></div>
                                     </div>
                                     <div class="health-text tooltipped" data-position="right" data-tooltip="" id="health-tooltip">
-                                        <h6 style="margin: 0px"><span class="font-header black-text"><span id="current-health">0</span>/1000 MHP</span></h6>
+                                        <h6 style="margin: 0px"><span class="font-header black-text"><span id="current-health">0</span>/500000 pts</span></h6>
                                     </div>
                                 </div>
                                 <h5><span class="font-header">Instant Modification</span></h5>
                                 <div class="card z-depth-0 card-description" style="padding-top: 10px; padding-bottom: 10px">
                                     <div class="row" style="margin-bottom: 10px;">
                                         <div class="input-field inline">
-                                            <input id="rst-hp-inline" type="number" max="1000" min="0" step="0.1">
+                                            <input id="rst-hp-inline" type="number" max="500000" min="0" step="1">
                                             <label for="rst-hp-inline">Hitpoint</label>
                                         </div>
                                         <button class="btn red waves-effect waves-light" onclick="resetHitpoint()" id="btn-rst">Reset</button>
                                     </div>
-                                    <div class="row" style="margin-bottom: 0px;">
+                                    <div class="row" style="margin-bottom: 10px;">
+                                        <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(-1000)">-1000</button>
                                         <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(-100)">-100</button>
                                         <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(-10)">-10</button>
-                                        <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(-1)">-1</button>
-                                        <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(1)">+1</button>
+                                    </div>
+                                    <div>
                                         <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(10)">+10</button>
                                         <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(100)">+100</button>
+                                        <button type="submit" class="btn waves-effect waves-light" onclick="instantModify(1000)">+1000</button>
                                     </div>
                                 </div>
                                 <h5><span class="font-header">Decrement Rate</span></h5>
                                 <div class="card z-depth-0 card-description" style="padding-top: 10px; padding-bottom: 10px">
-                                    <h6 style="margin: 0px"><span class="font-header black-text"><span id="health-decrement">0</span> MHP/s</span></h6>
+                                    <h6 style="margin: 0px"><span class="font-header black-text"><span id="health-decrement">0</span> pts/s</span></h6>
                                 </div>
                                 <div style="text-align: center">
                                     <button onclick="enableUpdatePanel()" class="btn waves-effect waves-light" id='btn-enable-update'>Update</button>
