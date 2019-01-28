@@ -7,5 +7,9 @@ service cloud.firestore {
     match /stats/{stat} {
     	allow read,write: if request.auth.uid != null;
     }
+    match /logs/{log} {
+    	allow read: if request.auth.uid != null;
+      allow write: if false;
+    }
   }
 }
