@@ -194,6 +194,13 @@ function startFauxClicking() {
   fauxClick(anime.random( cW * .2, cW * .8), anime.random(cH * .2, cH * .8));
 }
 
+function startFauxClicking2() {
+  setTimeout(function(){
+    fauxClick(anime.random( cW * .2, cW * .8), anime.random(cH * .2, cH * .8));
+    startFauxClicking2();
+  }, anime.random(200, 900));
+}
+
 function fauxClick(x, y) {
   var fauxClick = new Event("mousedown");
   fauxClick.pageX = x;
